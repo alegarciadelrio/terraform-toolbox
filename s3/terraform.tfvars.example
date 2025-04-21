@@ -1,0 +1,26 @@
+# AWS region to deploy resources
+aws_region = "us-east-1"
+
+# Environment name
+environment = "dev"
+
+# Bucket name - must be globally unique
+bucket_name = "your-shared-data-bucket"
+
+# List of ARNs from other tenants that need access to your bucket
+# These could be IAM roles, users, or root accounts from other AWS accounts
+other_tenants_principal_arns = [
+  "arn:aws:iam::TENANT_B_ACCOUNT_ID:role/S3AccessRole",
+  "arn:aws:iam::TENANT_C_ACCOUNT_ID:role/S3AccessRole",
+  "arn:aws:iam::TENANT_D_ACCOUNT_ID:user/s3-user"
+]
+
+# S3 actions other tenants are allowed to perform on your bucket
+other_tenants_allowed_actions = [
+  "s3:GetObject",
+  "s3:ListBucket",
+  "s3:PutObject"
+]
+
+# Enable versioning on the S3 bucket
+enable_versioning = true
