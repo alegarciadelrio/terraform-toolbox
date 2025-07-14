@@ -1,0 +1,17 @@
+# Example configuration for ACM certificate
+
+# Replace with your actual domain name
+domain_name = "example.com"
+route53_zone_name = "example.com"
+
+# Optional: Add additional domain names (SANs)
+# subject_alternative_names = ["www.example.com", "api.example.com"]
+
+# Validation method (DNS or EMAIL)
+validation_method = "DNS"
+
+# Optional tags
+tags = {
+  Environment = "development"
+  ManagedBy   = "terraform"
+}
