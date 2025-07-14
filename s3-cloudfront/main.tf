@@ -119,7 +119,7 @@ resource "aws_cloudfront_distribution" "static_site" {
   is_ipv6_enabled     = true
   comment             = "Static site distribution"
 
-  aliases = concat([var.domain_name], var.alternate_domain_names)
+  aliases = var.alternate_domain_names
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -147,6 +147,8 @@ resource "aws_cloudfront_distribution" "static_site" {
 
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate_arn
+    ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {

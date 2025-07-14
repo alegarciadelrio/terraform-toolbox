@@ -1,0 +1,15 @@
+# S3 Bucket Configuration
+bucket_name = "your-bucket-name"
+
+# Domain Configuration
+domain_name = "your-domain.com"
+zone_id = "zone-id"  # Replace with your Route53 hosted zone ID
+
+# Optional: Add alternate domain names
+alternate_domain_names = [
+  "www.your-domain.com",
+  "app.your-domain.com"
+]
+
+# ACM Certificate Configuration
+acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/your-certificate-id"  # Replace with your ACM certificate ARN
