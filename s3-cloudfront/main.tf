@@ -97,6 +97,10 @@ resource "aws_cloudfront_distribution" "static_site" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3-${aws_s3_bucket.static_site.bucket}"
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
 
     forwarded_values {
       query_string = false
@@ -104,11 +108,6 @@ resource "aws_cloudfront_distribution" "static_site" {
         forward = "none"
       }
     }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
   }
 
   restrictions {
@@ -124,6 +123,8 @@ resource "aws_cloudfront_distribution" "static_site" {
   tags = {
     Name = "MyStaticSite"
   }
+
+  default_root_object = "index.html"
 }
 
 # Origin Access Identity
