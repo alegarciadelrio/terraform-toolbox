@@ -27,14 +27,15 @@ resource "aws_s3_bucket_acl" "static_site" {
   acl    = "public-read"
 }
 
-# Block public access settings
+# Allow public access through both S3 and CloudFront
 resource "aws_s3_bucket_public_access_block" "static_site" {
   bucket = aws_s3_bucket.static_site.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  # Allow public access through S3 website endpoint
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 # Server-side encryption configuration
@@ -48,7 +49,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "static_site" {
   }
 }
 
-# Website configuration using the newer resource
+# Website configuration
 resource "aws_s3_bucket_website_configuration" "static_site" {
   bucket = aws_s3_bucket.static_site.id
 
@@ -59,22 +60,22 @@ resource "aws_s3_bucket_website_configuration" "static_site" {
   error_document {
     key = "error.html"
   }
-  
+
   routing_rules = jsonencode([
     {
       condition = {
         http_error_code_returned_equals = "404"
       }
       redirect  = {
-        host_name               = "${var.bucket_name}.s3-website-us-east-1.amazonaws.com"
-        http_redirect_code      = "301"
+        host_name = "${var.bucket_name}.s3-website-us-east-1.amazonaws.com"
+        http_redirect_code = "301"
         replace_key_prefix_with = ""
       }
     }
   ])
 }
 
-# S3 Bucket Policy
+# S3 Bucket Policy (Public Access)
 resource "aws_s3_bucket_policy" "static_site" {
   bucket = aws_s3_bucket.static_site.id
 
@@ -140,11 +141,11 @@ resource "aws_cloudfront_distribution" "static_site" {
   }
 
   tags = {
-    Name        = "MyStaticSite"
+    Name = "MyStaticSite"
   }
 }
 
-# CloudFront Origin Access Identity
+# Origin Access Identity
 resource "aws_cloudfront_origin_access_identity" "static_site" {
   comment = "Origin access identity for static site"
 }
