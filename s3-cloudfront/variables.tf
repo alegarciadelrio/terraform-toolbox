@@ -3,3 +3,15 @@ variable "bucket_name" {
   type        = string
   default     = "static-website"
 }
+
+variable "domain_name" {
+  description = "The domain name to use for the website"
+  type        = string
+  default     = "domain.com"
+}
+
+variable "zone_id" {
+  description = "The domain name to use for the website"
+  type        = string
+  default     = "zone-id"
+}

@@ -11,6 +11,32 @@ provider "aws" {
   region = "us-east-1"  # CloudFront requires us-east-1 for distribution
 }
 
+# Route53 Record for CloudFront Distribution
+resource "aws_route53_record" "cloudfront" {
+  zone_id = var.zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.static_site.domain_name
+    zone_id                = aws_cloudfront_distribution.static_site.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# Route53 Record for WWW Subdomain
+resource "aws_route53_record" "www" {
+  zone_id = var.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.static_site.domain_name
+    zone_id                = aws_cloudfront_distribution.static_site.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 # S3 Bucket
 resource "aws_s3_bucket" "static_site" {
   bucket = var.bucket_name
