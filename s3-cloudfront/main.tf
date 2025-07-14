@@ -152,7 +152,7 @@ resource "aws_cloudfront_distribution" "static_site" {
   }
 
   tags = {
-    Name = "MyStaticSite"
+    Name = var.domain_name
   }
 
   default_root_object = "index.html"
