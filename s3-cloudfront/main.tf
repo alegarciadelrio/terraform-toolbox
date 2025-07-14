@@ -21,12 +21,6 @@ resource "aws_s3_bucket" "static_site" {
   }
 }
 
-# Configure public access using the newer ACL resource
-resource "aws_s3_bucket_acl" "static_site" {
-  bucket = aws_s3_bucket.static_site.id
-  acl    = "public-read"
-}
-
 # Allow public access through both S3 and CloudFront
 resource "aws_s3_bucket_public_access_block" "static_site" {
   bucket = aws_s3_bucket.static_site.id
@@ -60,19 +54,6 @@ resource "aws_s3_bucket_website_configuration" "static_site" {
   error_document {
     key = "error.html"
   }
-
-  routing_rules = jsonencode([
-    {
-      condition = {
-        http_error_code_returned_equals = "404"
-      }
-      redirect  = {
-        host_name = "${var.bucket_name}.s3-website-us-east-1.amazonaws.com"
-        http_redirect_code = "301"
-        replace_key_prefix_with = ""
-      }
-    }
-  ])
 }
 
 # S3 Bucket Policy (Public Access)
