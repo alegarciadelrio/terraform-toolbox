@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"  # CloudFront requires us-east-1 for distribution
+  region = "us-east-1" # CloudFront requires us-east-1 for distribution
 }
 
 # Route53 Record for CloudFront Distribution
@@ -39,7 +39,7 @@ resource "aws_route53_record" "www" {
 
 # S3 Bucket
 resource "aws_s3_bucket" "static_site" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
   force_destroy = true
 
   tags = {
@@ -90,8 +90,8 @@ resource "aws_s3_bucket_policy" "static_site" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "PublicReadGetObject"
-        Effect = "Allow"
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
         Principal = "*"
         Action = [
           "s3:GetObject"
@@ -115,9 +115,9 @@ resource "aws_cloudfront_distribution" "static_site" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "Static site distribution"
+  enabled         = true
+  is_ipv6_enabled = true
+  comment         = "Static site distribution"
 
   aliases = var.alternate_domain_names
 
@@ -146,8 +146,8 @@ resource "aws_cloudfront_distribution" "static_site" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.acm_certificate_arn
+    ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
@@ -171,7 +171,7 @@ resource "aws_s3_bucket_policy" "static_site_cloudfront" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "AllowCloudFrontAccess"
+        Sid    = "AllowCloudFrontAccess"
         Effect = "Allow"
         Principal = {
           AWS = aws_cloudfront_origin_access_identity.static_site.iam_arn
